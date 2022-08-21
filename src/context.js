@@ -39,16 +39,19 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const removeStory = id => {
-    // console.log(id);
+  const removeStory = (id) => {
     dispatch({ type: REMOVE_STORY, payload: id });
   };
 
-  useEffect(() => {
-    fetchStories(`${API_ENDPOINT}query=${state.query}`);
-  }, []);
+  const handleSearch = (query) => {
+    dispatch({ type: HANDLE_SEARCH, payload: query });
+  };
 
-  return <AppContext.Provider value={{ ...state, removeStory }}>{children}</AppContext.Provider>;
+  useEffect(() => {
+    fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page}`);
+  }, [state.query]);
+
+  return <AppContext.Provider value={{ ...state, removeStory, handleSearch }}>{children}</AppContext.Provider>;
 };
 // make sure use
 export const useGlobalContext = () => {
